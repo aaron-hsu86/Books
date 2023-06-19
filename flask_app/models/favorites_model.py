@@ -97,3 +97,16 @@ class Faves:
         data = {'id' : id}
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
+    
+    # from solution doc: simpler SQL to get not favorite books:
+    @classmethod # not working code for this project, but used for reference
+    def unfavorited_books(cls,data):
+        # SELECT all info FOM books table WHERE books.id is NOT IN (SELECT the book_id FROM favorites table WHERE user_id = id)
+        query = "SELECT * FROM books WHERE books.id NOT IN ( SELECT book_id FROM favorites WHERE user_id = %(id)s );"
+        # no need to get all crazy with the EXCEPT conditional above.
+        results = connectToMySQL(cls.DB).query_db(query,data)
+        books = []
+        for row in results:
+            books.append(cls(row))
+        print(books)
+        return books
